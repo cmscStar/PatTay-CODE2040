@@ -1,2 +1,2 @@
 # PatTay-CODE2040
-tCODE2040 Fellows Program API Challenge
+CODE2040 API Challenge
