@@ -1,0 +1,36 @@
+#Obtain registration key
+import json,requests
+
+url = ('http://challenge.code2040.org/api/register')
+payload = {'email':'myemail@some.com','github':'https://github.com/cmscStar/PatTay-CODE2040'}
+headers = {'content-type': 'application/json', "Accept": 'application/json'}
+
+response = requests.post(url, data=json.dumps(payload), headers=headers)
+
+print(response.url)
+print response.content
+token = response.json()
+tokenReg = token["result"]
+
+#Obtain string
+
+url = ('http://challenge.code2040.org/api/getstring')
+payload = {'token':tokenReg}
+headers = {'content-type': 'application/json', "Accept": 'application/json'}
+
+response = requests.post(url, data=json.dumps(payload), headers=headers)
+
+print response.content
+
+myString = response.json()
+myString = myString["result"]
+print myString[::-1]
+
+#Reverse string and send it back
+
+url = ('http://challenge.code2040.org/api/validatestring')
+payload = {'token':tokenReg,'string':myString[::-1]}
+headers = {'content-type': 'application/json', "Accept": 'application/json'}
+
+response = requests.post(url, data=json.dumps(payload), headers=headers)
+print (response.json())
