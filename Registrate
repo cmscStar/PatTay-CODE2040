@@ -1,5 +1,0 @@
-payload = { "email" : "pattay1@umbc.edu", "github" : "https://github.com/"}
-headers = {'content-type': 'application/json', "Accept": 'application/json'}
-r = requests.post("http://challenge.code2040.org/api/register", json = payload, headers = headers)
-
-print(r.json)
