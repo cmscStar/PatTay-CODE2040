@@ -1,0 +1,44 @@
+### Stage II: Needle in a haystack
+
+#Obtain registration key
+
+import json,requests
+
+url = ('http://challenge.code2040.org/api/register')
+payload = {'email':'myemail@some.com','github':'https://github.com/cmscStar/PatTay-CODE2040'}
+headers = {'content-type': 'application/json', "Accept": 'application/json'}
+
+response = requests.post(url, data=json.dumps(payload), headers=headers)
+token = response.json()
+tokenReg = token["result"]
+
+#Obtain Needle and Stack
+
+url = ("http://challenge.code2040.org/api/haystack")
+payload = {'token':tokenReg}
+headers = {'content-type': 'application/json', "Accept": 'application/json'}
+
+response = requests.post(url, data=json.dumps(payload), headers=headers)
+
+print response.json()
+barnStuff = response.json()
+needle = barnStuff["result"]["needle"]
+haystack = barnStuff["result"]["haystack"]
+
+print (needle, haystack)
+
+#Search for Needle in the stack
+index = None
+for i in range(len(haystack)):
+    if haystack[i] == needle:
+        index = i
+
+print (index)
+
+#Return the index number found
+url = ("http://challenge.code2040.org/api/validateneedle")
+payload = {'token':tokenReg,'needle':index}
+headers = {'content-type': 'application/json', "Accept": 'application/json'}
+
+responsef = requests.post(url, data=json.dumps(payload), headers=headers)
+print (responsef.content)
