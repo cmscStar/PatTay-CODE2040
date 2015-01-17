@@ -1,0 +1,51 @@
+### Stage IV: The dating game
+
+#Obtain registration key
+
+import json,requests
+
+url = ('http://challenge.code2040.org/api/register')
+payload = {'email':'myemail@some.com','github':'https://github.com/cmscStar/PatTay-CODE2040'}
+headers = {'content-type': 'application/json', "Accept": 'application/json'}
+
+response = requests.post(url, data=json.dumps(payload), headers=headers)
+token = response.json()
+tokenReg = token["result"]
+
+#Obtain datestamp and interval
+ 
+url = ("http://challenge.code2040.org/api/time")
+payload = {'token':tokenReg}
+headers = {'content-type': 'application/json', "Accept": 'application/json'}
+
+response = requests.post(url, data=json.dumps(payload), headers=headers)
+
+response = response.json()
+datestamp = response["result"]["datestamp"]
+interval = response["result"]["interval"]
+print (response)
+
+#import dateutil 
+from datetime import *; from dateutil.relativedelta import *
+import calendar
+
+#import parsing material
+from dateutil.parser import *
+from dateutil.tz import *
+from datetime import *
+
+# Convert the datestamp
+
+newDatestamp = parse(datestamp)
+print ("this is orig time",newDatestamp)
+newDatestamp += relativedelta(seconds=+interval) 
+print ("this is new time",newDatestamp.strftime('%Y-%m-%dT%H:%M:%S.%fZ'))
+newDatestamp = newDatestamp.strftime('%Y-%m-%dT%H:%M:%S.%fZ')
+
+#Return the updated datestamp found
+url = ("http://challenge.code2040.org/api/validatetime")
+payload = {'token':tokenReg,'datestamp':newDatestamp}
+headers = {'content-type': 'application/json', "Accept": 'application/json'}
+
+responsef = requests.post(url, data=json.dumps(payload), headers=headers)
+print (responsef.content)
