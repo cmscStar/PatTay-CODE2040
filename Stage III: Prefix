@@ -1,0 +1,49 @@
+### Stage III: Prefix
+
+#Obtain registration key
+
+import json,requests
+
+url = ('http://challenge.code2040.org/api/register')
+payload = {'email':'myemail@some.com','github':'https://github.com/cmscStar/PatTay-CODE2040'}
+headers = {'content-type': 'application/json', "Accept": 'application/json'}
+
+response = requests.post(url, data=json.dumps(payload), headers=headers)
+token = response.json()
+tokenReg = token["result"]
+
+#Obtain Collections and Prefix
+
+url = ("http://challenge.code2040.org/api/prefix")
+payload = {'token':tokenReg}
+headers = {'content-type': 'application/json', "Accept": 'application/json'}
+
+response = requests.post(url, data=json.dumps(payload), headers=headers)
+
+print response.json()
+collection = response.json()
+prefix = collection["result"]["prefix"]
+array = collection["result"]["array"]
+
+print (prefix,array)
+
+#Search for the prefix in the collection
+
+arrayNew = []
+count = 0
+for i in range(len(array)):
+    for r in range(len(prefix)):
+        if array[i][r] == prefix[r]:
+            count += 1
+    if count != len(prefix):
+        arrayNew.append(array[i])
+    count = 0    
+print (arrayNew)
+
+#Return the index number found
+url = ("http://challenge.code2040.org/api/validateprefix")
+payload = {'token':tokenReg,'array':arrayNew}
+headers = {'content-type': 'application/json', "Accept": 'application/json'}
+
+responsef = requests.post(url, data=json.dumps(payload), headers=headers)
+print (responsef.content)
